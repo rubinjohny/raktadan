@@ -12,8 +12,12 @@ class EnterInfo extends React.Component{
    constructor(props){
       super(props);
       this.state = {
+         name:"",
+         city:"",
+         phone:"",
          bloodType: bloodTypes[0],
-         gender: gender[0]
+         gender: gender[0],
+         age:18
       }
    }
 
@@ -46,13 +50,13 @@ class EnterInfo extends React.Component{
 
             <Row>
                <Col>
-                  <Input placeholder="Name" style={{ margin: 10 }} />
+                  <Input placeholder="Name" style={{ margin: 10 }} onChange={e=>this.setState({name:e.target.value})} />
                </Col>
                <Col>
-                  <Input placeholder="address" style={{ margin: 10 }} />
+                  <Input placeholder="city" style={{ margin: 10 }} onChange={e => this.setState({ city: e.target.value })}/>
                </Col>
                <Col>
-                  <Input placeholder="phone" style={{ margin: 10 }} />
+                  <Input placeholder="phone" style={{ margin: 10 }} onChange={e => this.setState({ phone: e.target.value })}/>
                </Col>
             </Row>
 
@@ -60,7 +64,7 @@ class EnterInfo extends React.Component{
                
                <Col span={10} className="gutter-row">
                   <div className="gutter-box">
-                     <InputNumber min={18} max={40} defaultValue={18} style={{margin: 10}} />
+                     <InputNumber min={18} max={40} defaultValue={18} style={{ margin: 10 }} onChange={e => this.setState({ age: e })}/>
                   </div>
                </Col>
                <Col span={7} className="gutter-row">
@@ -78,7 +82,14 @@ class EnterInfo extends React.Component{
                   </div>
                </Col>
             </Row>
-            <Button onClick={() => this.props.onEnterInfo()}>Submit</Button>
+            <Button onClick={() => this.props.onEnterInfo({
+               name: this.state.name,
+               city: this.state.city,
+               phone: this.state.phone,
+               bloodType: this.state.bloodType,
+               gender: this.state.gender,
+               age:this.state.age
+            })}>Submit</Button>
          </div>
       )
    }

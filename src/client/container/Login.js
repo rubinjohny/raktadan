@@ -2,9 +2,14 @@ import React from 'react';
 import { Input, Row, Col, Button } from 'antd';
 import { Link} from 'react-router-dom';
 import '../styles/login.css';
-import Firebase from '../components/Firebase';
+import firebase from '../components/Firebase';
+import { ToastContainer, toast } from 'react-toastify';
+import { connect } from 'react-redux'
+import { withRouter } from "react-router";
+
 
 class Login extends React.Component{
+
 
    constructor(props){
       super(props)
@@ -15,23 +20,38 @@ class Login extends React.Component{
          email:"",
          password:""
       }
+      
    }
 
    componentDidMount(){
-      console.log("login mount");
+      console.log(this.props);
+
+      // console.log("login mount");
    }
 
-   onSubmit = () => {
-      console.log("firebase => ", Firebase);
+   onRegister = () => {
+
       
       // Firebase.doCreateUserWithEmailAndPassword(this.state.email,this.state.password);
       // this.setState({ showRegister: false, showLogin: true })
+
+      firebase.createUserWithEmailAndPassword(this.state.email,this.state.password)
+      .then( res => {
+         console.log(res.user.uid);
+         localStorage.token = res.user.uid;
+         this.props.history.push("dashboard");
+         // toast.success(res.message);
+
+      })
+      .catch( err => toast.error(err.message))
+
    }
 
    render(){
 
       return(
          <div>
+            <ToastContainer />
             {this.state.showLogin && (
                <div className="outer animated headShake">
                   <span style={{fontSize:22}}>Login page</span>
@@ -77,7 +97,7 @@ class Login extends React.Component{
                      </Col>
                   </Row>
                   <Row style={{ marginTop: 20 }}>
-                     <Button onClick={() => this.onSubmit()}>Register and Log In</Button>
+                     <Button onClick={() => this.onRegister()}>Register and Log In</Button>
                   </Row>
                </div>
             )}
@@ -85,6 +105,18 @@ class Login extends React.Component{
          </div>
       )
    }
-
 }
-export default Login;
+
+const mapStateToProps = state => {
+   return ({
+      main: state.main
+   })
+}
+
+const mapDispatchToProps = dispatch => ({
+   
+})
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps
+)(withRouter(Login))

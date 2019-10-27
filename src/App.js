@@ -3,12 +3,13 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from './client/container/Home';
 import 'antd/dist/antd.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { Provider } from 'react-redux'
 
-function App() {
-
-  return (
-    <div className="App">
-      <Router>
+const App = ({ store }) => (
+  <Provider store={store}>
+    <Router>
+      <div className="App">
         <Switch>
           <Route exact path="/">
             <Home />
@@ -17,12 +18,22 @@ function App() {
             <div>about</div>
           </Route>
           <Route path="/dashboard">
-            <Home/>
+            <Home />
           </Route>
         </Switch>
-      </Router>
-    </div>
-  );
-}
+      </div>
+    </Router>
+  </Provider>
+)
+
+
+// function App() {
+
+//   return (
+    
+      
+//     </div>
+//   );
+// }
 
 export default App;

@@ -2,9 +2,10 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Login from './Login';
 import EnterInfo from './EnterInfo';
-
-import Firebase from '../components/Firebase';
 import { Button } from 'antd';
+import firebase from '../components/Firebase';
+import { database } from 'firebase';
+
 
 class Home extends React.Component{
 
@@ -14,15 +15,47 @@ class Home extends React.Component{
          isLoggedIn:true,
          showEnterInfo:true,
       }
+      
 
    }
 
    componentDidMount(){
-      console.log("home mounted");
+      var that =this;
+      
+      firebase.onAuthStateChanged(function (user) {
+         if (user) {
+            // User is signed in.
+            that.setState({isLoggedIn:true})
+            
+         } else {
+            that.setState({isLoggedIn:false})
+            // No user is signed in.
+         }
+      });
+
       this.setState({isLoggedIn:false})
    }
 
    onEnterInfo = (data) => {
+      // console.log(data, database )
+      var rootRef = database().ref();
+
+      console.log(rootRef);
+      rootRef.once("value")
+      .then(function (snapshot) {
+         var val = snapshot.val; // null
+         console.log("val:", val);
+         
+      });
+
+      var out = database().ref("/rubin");
+      var obj = {
+         mitali:'Fuck You!'
+      }
+      out.push(obj);
+      // out.set(obj);
+      // out.update(obj);
+      
       this.setState({
          showEnterInfo:false
       })

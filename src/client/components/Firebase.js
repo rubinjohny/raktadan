@@ -1,6 +1,5 @@
-// var firebase = require("firebase/app");
-import app from 'firebase/app';
-import "firebase/auth";
+
+import firebase from 'firebase'
 
 const config = {
    apiKey: "AIzaSyCV5FVLofMPLUOSGwo3M8aCf_yFq7ToMYE",
@@ -11,21 +10,6 @@ const config = {
    messagingSenderId: "546200176339",
 };
 
+const FbApp = firebase.initializeApp(config)
 
-
-class f {
-   constructor(){
-      app.initializeApp(config);
-      this.auth = app.auth();
-      console.log("constructor with auth " + this.auth);
-      
-   }
-
-   x = function doCreateUserWithEmailAndPassword(email,password){
-      console.log("calling create user with email:" + email + " password:" + password);
-      
-      this.auth.createUserWithEmailAndPassword(email,password);
-   }
-
-}
-export default f;
+export default FbApp.auth();
