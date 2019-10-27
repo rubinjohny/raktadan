@@ -14,6 +14,7 @@ class Home extends React.Component{
       this.state = {
          isLoggedIn:true,
          showEnterInfo:true,
+         email:''
       }
 
    }
@@ -24,7 +25,7 @@ class Home extends React.Component{
       firebase.onAuthStateChanged(function (user) {
          if (user) {
             // User is signed in.
-            that.setState({isLoggedIn:true})
+            that.setState({isLoggedIn:true,email:user.email})
             
          } else {
             that.setState({isLoggedIn:false})
@@ -45,7 +46,8 @@ class Home extends React.Component{
             blood_type: data.bloodType,
             city:data.city,
             gender:data.gender,
-            phone:data.phone
+            phone:data.phone,
+            email:this.state.email
          })
          .then(docRef => console.log(docRef.id))
          .catch(err => console.log(err))
@@ -54,7 +56,8 @@ class Home extends React.Component{
          firestoreDb.collection("banks").add({
             name: data.name,
             city: data.city,
-            phone: data.phone
+            phone: data.phone,
+            email:this.state.email
          })
          .then(docRef => console.log(docRef.id))
          .catch(err => console.log(err))
