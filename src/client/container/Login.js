@@ -6,7 +6,7 @@ import firebase from '../components/Firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import { connect } from 'react-redux'
 import { withRouter } from "react-router";
-import FirestoreDb from '../components/Firestore';
+// import FirestoreDb from '../components/Firestore';
 
 class Login extends React.Component{
 

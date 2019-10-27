@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Login from './Login';
 import EnterInfo from './EnterInfo';
-import { Button } from 'antd';
+import { Button, Spin, Row, Col} from 'antd';
 import firebase from '../components/Firebase';
 // import { database } from 'firebase';
 import firestoreDb from '../components/Firestore';
@@ -14,7 +14,9 @@ class Home extends React.Component{
       this.state = {
          isLoggedIn:true,
          showEnterInfo:true,
-         email:''
+         email:'',
+         userType:undefined,
+         loaded:false
       }
 
    }
@@ -27,8 +29,28 @@ class Home extends React.Component{
             // User is signed in.
             that.setState({isLoggedIn:true,email:user.email})
             
+            firestoreDb.collection("banks").get()
+            .then((querySnapshot) => {
+               querySnapshot.forEach((doc) => {
+                  var data = doc.data();
+                  // console.log(data);
+                  if(data.email === user.email)
+                     that.setState({ showEnterInfo: false, userType: 'bank', loaded: true})
+               });
+            });
+
+            firestoreDb.collection("donors").get()
+            .then((querySnapshot) => {
+               querySnapshot.forEach((doc) => {
+                  var data = doc.data();
+                  // console.log(data);
+                  if (data.email === user.email)
+                     that.setState({ showEnterInfo: false, userType: 'donor', loaded: true })
+               });
+            });
+            
          } else {
-            that.setState({isLoggedIn:false})
+            that.setState({ isLoggedIn: false, loaded: true})
             // No user is signed in.
          }
       });
@@ -39,7 +61,7 @@ class Home extends React.Component{
    onEnterInfo = (data) => {
       console.log(data.type);
       
-      if (data.type == "Blood Doner"){
+      if (data.type === "Blood Doner"){
          firestoreDb.collection("donors").add({
             name: data.name,
             age: data.age,
@@ -49,7 +71,7 @@ class Home extends React.Component{
             phone:data.phone,
             email:this.state.email
          })
-         .then(docRef => console.log(docRef.id))
+         .then(docRef => this.setState({ showEnterInfo: false, userType: 'donor'}))
          .catch(err => console.log(err))
       }
       else{
@@ -59,19 +81,9 @@ class Home extends React.Component{
             phone: data.phone,
             email:this.state.email
          })
-         .then(docRef => console.log(docRef.id))
+         .then(docRef => this.setState({ showEnterInfo: false, userType: 'bank' }))
          .catch(err => console.log(err))
       }
-
-      
-
-
-      // firestoreDb.collection("sample").get()
-      // .then((querySnapshot) => {
-      //    querySnapshot.forEach((doc) => {
-      //       console.log(`${doc.id} => ${doc.data()}`);
-      //    });
-      // });
       
       this.setState({
          showEnterInfo:false
@@ -79,6 +91,17 @@ class Home extends React.Component{
    } 
 
    render(){
+
+      if(!this.state.loaded){
+         return (
+            <Row>
+               <Col>
+                  {/* <span>Loading ..</span> */}
+                  <Spin />
+               </Col>
+            </Row>
+         )
+      }
 
       if(!this.state.isLoggedIn)
          return(
