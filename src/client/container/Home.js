@@ -4,8 +4,8 @@ import Login from './Login';
 import EnterInfo from './EnterInfo';
 import { Button } from 'antd';
 import firebase from '../components/Firebase';
-import { database } from 'firebase';
-
+// import { database } from 'firebase';
+import firestoreDb from '../components/Firestore';
 
 class Home extends React.Component{
 
@@ -15,7 +15,6 @@ class Home extends React.Component{
          isLoggedIn:true,
          showEnterInfo:true,
       }
-      
 
    }
 
@@ -37,24 +36,39 @@ class Home extends React.Component{
    }
 
    onEnterInfo = (data) => {
-      // console.log(data, database )
-      var rootRef = database().ref();
-
-      console.log(rootRef);
-      rootRef.once("value")
-      .then(function (snapshot) {
-         var val = snapshot.val; // null
-         console.log("val:", val);
-         
-      });
-
-      var out = database().ref("/rubin");
-      var obj = {
-         mitali:'Fuck You!'
+      console.log(data.type);
+      
+      if (data.type == "Blood Doner"){
+         firestoreDb.collection("donors").add({
+            name: data.name,
+            age: data.age,
+            blood_type: data.bloodType,
+            city:data.city,
+            gender:data.gender,
+            phone:data.phone
+         })
+         .then(docRef => console.log(docRef.id))
+         .catch(err => console.log(err))
       }
-      out.push(obj);
-      // out.set(obj);
-      // out.update(obj);
+      else{
+         firestoreDb.collection("banks").add({
+            name: data.name,
+            city: data.city,
+            phone: data.phone
+         })
+         .then(docRef => console.log(docRef.id))
+         .catch(err => console.log(err))
+      }
+
+      
+
+
+      // firestoreDb.collection("sample").get()
+      // .then((querySnapshot) => {
+      //    querySnapshot.forEach((doc) => {
+      //       console.log(`${doc.id} => ${doc.data()}`);
+      //    });
+      // });
       
       this.setState({
          showEnterInfo:false

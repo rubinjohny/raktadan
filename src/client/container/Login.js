@@ -6,7 +6,7 @@ import firebase from '../components/Firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import { connect } from 'react-redux'
 import { withRouter } from "react-router";
-
+import FirestoreDb from '../components/Firestore';
 
 class Login extends React.Component{
 
@@ -31,7 +31,6 @@ class Login extends React.Component{
 
    onRegister = () => {
 
-      
       // Firebase.doCreateUserWithEmailAndPassword(this.state.email,this.state.password);
       // this.setState({ showRegister: false, showLogin: true })
 
