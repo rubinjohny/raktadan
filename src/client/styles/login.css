@@ -1,0 +1,13 @@
+.outer {
+  text-align: center;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 2px 2px 2px 2px #fafafb;
+  min-width: 350px;
+}
+
+.link {
+  color: #ff4d4f;
+  text-decoration: underline;
+  cursor:pointer;
+}
